@@ -1,6 +1,7 @@
 import asyncpg
 import re
 import json
+import ssl
 
 from aiohttp_boilerplate.views import fixed_dump
 
@@ -38,8 +39,13 @@ async def create_connection(conf, loop=None):
 
 async def create_pool(conf, loop=None):
 
+    ssl_object = ssl.create_default_context()
+    ssl_object.check_hostname = False
+    ssl_object.verify_mode = ssl.CERT_NONE
+
     return await asyncpg.create_pool(
         **conf,
+        ssl=ssl_object,
         loop=loop,
         setup=setup_connection
     )
