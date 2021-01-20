@@ -38,11 +38,9 @@ async def create_connection(conf, loop=None):
     )
 
 async def create_pool(conf, loop=None):
-    ssl_object = ssl.create_default_context(capath="/opt/app/ca-certificate.crt")
-
     return await asyncpg.create_pool(
         **conf,
-        ssl=ssl_object,
+        ssl='require',
         loop=loop,
         setup=setup_connection
     )
